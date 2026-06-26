@@ -303,6 +303,26 @@ st.markdown(
     .now-playing span:nth-child(6) { height:95%; animation-delay: 0.75s; }
     .now-playing span:nth-child(7) { height:40%; animation-delay: 0.9s; }
     .now-playing-label { font-family:'JetBrains Mono', monospace; font-size:0.72em; color:#A78BFA; margin-left:8px; letter-spacing:0.5px; }
+
+    /* ── Bug fixes ────────────────────────────────────────────────────── */
+    /* Prevent the new padding/border on cards from pushing layout width
+       past the container — this was causing horizontal overflow and
+       clipped content on the right edge of the page. */
+    div[data-testid="stImage"],
+    div[data-testid="stAudio"],
+    [data-testid="stFileUploaderDropzone"] {
+        box-sizing: border-box !important;
+        max-width: 100% !important;
+    }
+    .stApp { overflow-x: hidden; }
+
+    /* Mute the native sidebar resize handle so it doesn't render as a
+       bright vertical line down the page when the sidebar is collapsed. */
+    [data-testid="stSidebarResizeHandle"],
+    [data-testid="stSidebarCollapsedControl"] ~ div[role="separator"],
+    div[data-testid="collapsedControl"] ~ div {
+        background-color: rgba(124, 58, 237, 0.12) !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
