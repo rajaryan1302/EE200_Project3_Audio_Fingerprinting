@@ -124,17 +124,47 @@ st.set_page_config(
     layout="wide",
 )
 
+# ── Global theme CSS (Indigo / Violet palette) ─────────────────────────────────
+st.markdown(
+    """
+    <style>
+    :root {
+        --accent-1: #7C3AED;   /* violet   */
+        --accent-2: #C084FC;  /* lilac    */
+        --accent-3: #4F46E5;  /* indigo   */
+    }
+    /* Tabs underline + selected tab color */
+    .stTabs [data-baseweb="tab"] {
+        color: #A78BFA;
+    }
+    .stTabs [aria-selected="true"] {
+        color: var(--accent-1) !important;
+        border-bottom-color: var(--accent-1) !important;
+    }
+    /* Progress bar */
+    .stProgress > div > div > div > div {
+        background-image: linear-gradient(90deg, var(--accent-3), var(--accent-2));
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(
     """
-    <h1 style='text-align:center;color:#4C8BF5;letter-spacing:2px;'>
+    <h1 style='text-align:center;
+               background:linear-gradient(90deg,#7C3AED,#C084FC);
+               -webkit-background-clip:text;
+               -webkit-text-fill-color:transparent;
+               letter-spacing:2px;'>
     🎵  Sonic Signatures
     </h1>
-    <p style='text-align:center;color:#888;font-size:1.05em;'>
+    <p style='text-align:center;color:#9CA3AF;font-size:1.05em;'>
     A Shazam-style audio fingerprinting system.
     Upload a clip — we'll tell you which song it is.
     </p>
-    <hr/>
+    <hr style='border-color:#7C3AED33;'/>
     """,
     unsafe_allow_html=True,
 )
@@ -144,7 +174,10 @@ db = get_database()
 song_list = db.get("__song_list__", [])
 
 with st.sidebar:
-    st.markdown("### 📚 Indexed Songs")
+    st.markdown(
+        "<h3 style='color:#A78BFA;'>📚 Indexed Songs</h3>",
+        unsafe_allow_html=True,
+    )
     if song_list:
         for name in song_list:
             st.markdown(f"- `{name}`")
@@ -152,7 +185,10 @@ with st.sidebar:
         st.info("No songs indexed yet.")
 
     st.markdown("---")
-    st.markdown("### ⚙️ Settings")
+    st.markdown(
+        "<h3 style='color:#A78BFA;'>⚙️ Settings</h3>",
+        unsafe_allow_html=True,
+    )
     use_pairs = st.toggle("Use paired hashes", value=True,
                           help="Paired hashes are more discriminative. "
                                "Toggle off to see single-peak mode.")
@@ -340,12 +376,12 @@ with tab_batch:
 
 st.markdown(
     """
-    <hr/>
-    <p style='text-align:center;color:#666;font-size:0.85em;'>
+    <hr style='border-color:#7C3AED33;'/>
+    <p style='text-align:center;color:#9CA3AF;font-size:0.85em;'>
     Sonic Signatures · Audio Fingerprinting System ·
-    Built with <a href='https://librosa.org' target='_blank'>librosa</a>,
-    <a href='https://scipy.org' target='_blank'>SciPy</a> &amp;
-    <a href='https://streamlit.io' target='_blank'>Streamlit</a>
+    Built with <a href='https://librosa.org' target='_blank' style='color:#A78BFA;'>librosa</a>,
+    <a href='https://scipy.org' target='_blank' style='color:#A78BFA;'>SciPy</a> &amp;
+    <a href='https://streamlit.io' target='_blank' style='color:#A78BFA;'>Streamlit</a>
     </p>
     """,
     unsafe_allow_html=True,
