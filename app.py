@@ -213,6 +213,52 @@ st.markdown(
     }
     .stat-card .label { font-size:0.72em; color:#A78BFA; letter-spacing:0.5px; text-transform:uppercase; }
     .stat-card .value { font-family:'JetBrains Mono', monospace; font-size:1.6em; color:#E9D5FF; margin-top:2px; }
+    .stat-card { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(124,58,237,0.25); }
+
+    /* Animated shimmer on the main title */
+    @keyframes shimmer { 0% {background-position:0% 50%;} 50% {background-position:100% 50%;} 100% {background-position:0% 50%;} }
+    .shimmer-title {
+        background: linear-gradient(270deg, #7C3AED, #C084FC, #4F46E5, #C084FC, #7C3AED);
+        background-size: 400% 100%;
+        animation: shimmer 6s ease-in-out infinite;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Recolor default Streamlit alert boxes to match the theme */
+    div[data-testid="stAlertContentSuccess"], div[data-baseweb="notification"]:has(div[data-testid="stAlertContentSuccess"]) {
+        background: linear-gradient(135deg, #1E3A2E, #16291F) !important;
+        border: 1px solid #34D39966 !important;
+    }
+    div[data-testid="stAlertContentWarning"], div[data-baseweb="notification"]:has(div[data-testid="stAlertContentWarning"]) {
+        background: linear-gradient(135deg, #3D2E12, #2A1F0C) !important;
+        border: 1px solid #FBBF2466 !important;
+    }
+    div[data-testid="stAlertContentInfo"], div[data-baseweb="notification"]:has(div[data-testid="stAlertContentInfo"]) {
+        background: linear-gradient(135deg, #1A1430, #120F24) !important;
+        border: 1px solid #7C3AED66 !important;
+    }
+
+    /* Hover-lift on image cards */
+    div[data-testid="stImage"] { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    div[data-testid="stImage"]:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,0.22); }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #120F24; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7C3AED, #4F46E5); border-radius: 6px; }
+
+    /* Pipeline stepper */
+    .pipeline-row { display:flex; align-items:center; justify-content:center; gap:6px; margin:0.8em 0 1.2em 0; flex-wrap:wrap; }
+    .pipe-step { display:flex; align-items:center; gap:6px; }
+    .pipe-bubble {
+        font-family:'JetBrains Mono', monospace; font-size:0.78em;
+        padding:6px 13px; border-radius:999px;
+        background: linear-gradient(135deg, #1A1430, #2D1B4E);
+        border: 1px solid #7C3AED55; color:#E9D5FF;
+    }
+    .pipe-arrow { color:#7C3AED; font-size:1em; opacity:0.7; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -236,12 +282,10 @@ st.markdown(
         </svg>
     </div>
     <h1 style='text-align:center;
-               background:linear-gradient(90deg,#7C3AED,#C084FC);
-               -webkit-background-clip:text;
-               -webkit-text-fill-color:transparent;
                letter-spacing:1px;
                font-weight:700;
-               margin-bottom:0.15em;'>
+               margin-bottom:0.15em;'
+        class='shimmer-title'>
     Sonic Signatures
     </h1>
     <p style='text-align:center;color:#9CA3AF;font-size:1.0em;margin-bottom:0.6em;'>
@@ -251,6 +295,17 @@ st.markdown(
         <span class='badge-pill'>EE200 · SIGNALS &amp; SYSTEMS</span>
         <span class='badge-pill'>Raj &amp; Abhinav Bajpai</span>
         <span class='badge-pill'>IIT KANPUR</span>
+    </div>
+    <div class='pipeline-row'>
+        <div class='pipe-step'><span class='pipe-bubble'>WAVEFORM</span></div>
+        <span class='pipe-arrow'>➜</span>
+        <div class='pipe-step'><span class='pipe-bubble'>STFT</span></div>
+        <span class='pipe-arrow'>➜</span>
+        <div class='pipe-step'><span class='pipe-bubble'>CONSTELLATION</span></div>
+        <span class='pipe-arrow'>➜</span>
+        <div class='pipe-step'><span class='pipe-bubble'>FAN-OUT HASHES</span></div>
+        <span class='pipe-arrow'>➜</span>
+        <div class='pipe-step'><span class='pipe-bubble'>OFFSET VOTE</span></div>
     </div>
     <hr style='border-color:#7C3AED33;'/>
     """,
