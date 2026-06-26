@@ -259,6 +259,50 @@ st.markdown(
         border: 1px solid #7C3AED55; color:#E9D5FF;
     }
     .pipe-arrow { color:#7C3AED; font-size:1em; opacity:0.7; }
+
+    /* Custom file-uploader dropzone */
+    [data-testid="stFileUploaderDropzone"] {
+        background: linear-gradient(145deg, #1A143055, #0E111799) !important;
+        border: 1.5px dashed #7C3AED77 !important;
+        border-radius: 14px !important;
+        transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    [data-testid="stFileUploaderDropzone"]:hover {
+        border-color: #C084FC !important;
+        background: linear-gradient(145deg, #2D1B4E55, #1A143099) !important;
+    }
+    [data-testid="stFileUploaderDropzone"] button {
+        background: linear-gradient(90deg, #4F46E5, #7C3AED) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+    }
+
+    /* Audio player card wrapper */
+    div[data-testid="stAudio"] {
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid #7C3AED33;
+        background: linear-gradient(145deg, #1A143055, #0E111799);
+    }
+    div[data-testid="stAudio"] audio { width: 100%; accent-color: #7C3AED; }
+
+    /* Decorative animated waveform bars ("now playing" indicator) */
+    @keyframes wavebounce { 0%,100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+    .now-playing { display:flex; align-items:center; gap:3px; height:22px; margin:8px 0 2px 2px; }
+    .now-playing span {
+        display:block; width:3px; border-radius:2px;
+        background: linear-gradient(180deg, #C084FC, #7C3AED);
+        animation: wavebounce 1.1s ease-in-out infinite;
+    }
+    .now-playing span:nth-child(1) { height:60%; animation-delay: 0s; }
+    .now-playing span:nth-child(2) { height:100%; animation-delay: 0.15s; }
+    .now-playing span:nth-child(3) { height:45%; animation-delay: 0.3s; }
+    .now-playing span:nth-child(4) { height:85%; animation-delay: 0.45s; }
+    .now-playing span:nth-child(5) { height:55%; animation-delay: 0.6s; }
+    .now-playing span:nth-child(6) { height:95%; animation-delay: 0.75s; }
+    .now-playing span:nth-child(7) { height:40%; animation-delay: 0.9s; }
+    .now-playing-label { font-family:'JetBrains Mono', monospace; font-size:0.72em; color:#A78BFA; margin-left:8px; letter-spacing:0.5px; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -361,6 +405,15 @@ with tab_single:
 
     if uploaded is not None:
         st.audio(uploaded, format="audio/" + uploaded.name.split(".")[-1])
+        st.markdown(
+            f"""
+            <div class='now-playing'>
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                <span class='now-playing-label'>QUERY CLIP LOADED · {uploaded.name}</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         with st.spinner("🔍 Fingerprinting…"):
             y, sr = load_uploaded_file(uploaded)
