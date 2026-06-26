@@ -290,7 +290,7 @@ st.markdown(
     /* Decorative animated waveform bars ("now playing" indicator) */
     @keyframes wavebounce { 0%,100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
     .now-playing { display:flex; align-items:center; gap:3px; height:22px; margin:8px 0 2px 2px; }
-    .now-playing span {
+    .now-playing span:not(.now-playing-label) {
         display:block; width:3px; border-radius:2px;
         background: linear-gradient(180deg, #C084FC, #7C3AED);
         animation: wavebounce 1.1s ease-in-out infinite;
