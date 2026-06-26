@@ -165,6 +165,54 @@ st.markdown(
         background: linear-gradient(90deg, var(--accent-1), var(--accent-2)) !important;
         color: white !important;
     }
+
+    /* ── Distinct branding additions ─────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    html, body, [class*="css"]  { font-family: 'Space Grotesk', sans-serif; }
+    code, .stCode, [data-testid="stMetricValue"] { font-family: 'JetBrains Mono', monospace; }
+
+    /* Subtle dot-grid texture layered on top of the gradient */
+    .stApp {
+        background-image:
+            radial-gradient(circle, rgba(196,132,252,0.10) 1px, transparent 1px),
+            linear-gradient(160deg, #0E1117 0%, #1A1430 45%, #2D1B4E 100%);
+        background-size: 22px 22px, cover;
+    }
+
+    /* Badge pill under the title */
+    .badge-row { display:flex; justify-content:center; gap:8px; margin-bottom:0.6em; flex-wrap:wrap; }
+    .badge-pill {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72em;
+        padding: 3px 12px;
+        border-radius: 999px;
+        border: 1px solid #7C3AED66;
+        background: #7C3AED1A;
+        color: #C4B5FD;
+        letter-spacing: 0.5px;
+    }
+
+    /* Card wrapper for images (spectrogram / constellation / histogram) */
+    div[data-testid="stImage"] {
+        border: 1px solid #7C3AED33;
+        border-radius: 14px;
+        padding: 10px;
+        background: linear-gradient(145deg, #1A143055, #0E111799);
+        box-shadow: 0 4px 18px rgba(124, 58, 237, 0.12);
+    }
+
+    /* Custom stat-card grid */
+    .stat-grid { display:flex; gap:12px; flex-wrap:wrap; margin-top:0.5em; }
+    .stat-card {
+        flex:1; min-width:140px;
+        border: 1px solid #7C3AED40;
+        border-radius: 12px;
+        padding: 14px 16px;
+        background: linear-gradient(145deg, #1A143066, #2D1B4E44);
+    }
+    .stat-card .label { font-size:0.72em; color:#A78BFA; letter-spacing:0.5px; text-transform:uppercase; }
+    .stat-card .value { font-family:'JetBrains Mono', monospace; font-size:1.6em; color:#E9D5FF; margin-top:2px; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -173,17 +221,37 @@ st.markdown(
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown(
     """
+    <div style='text-align:center; margin-top:-0.5em;'>
+        <svg width="46" height="46" viewBox="0 0 100 100" style="margin-bottom:-8px;">
+            <g fill="none" stroke="#C084FC" stroke-width="6" stroke-linecap="round">
+                <line x1="10" y1="50" x2="10" y2="50"/>
+                <line x1="22" y1="35" x2="22" y2="65"/>
+                <line x1="34" y1="20" x2="34" y2="80"/>
+                <line x1="46" y1="10" x2="46" y2="90"/>
+                <line x1="58" y1="25" x2="58" y2="75"/>
+                <line x1="70" y1="38" x2="70" y2="62"/>
+                <line x1="82" y1="44" x2="82" y2="56"/>
+                <line x1="94" y1="48" x2="94" y2="52"/>
+            </g>
+        </svg>
+    </div>
     <h1 style='text-align:center;
                background:linear-gradient(90deg,#7C3AED,#C084FC);
                -webkit-background-clip:text;
                -webkit-text-fill-color:transparent;
-               letter-spacing:2px;'>
-    🎵  Sonic Signatures
+               letter-spacing:1px;
+               font-weight:700;
+               margin-bottom:0.15em;'>
+    Sonic Signatures
     </h1>
-    <p style='text-align:center;color:#9CA3AF;font-size:1.05em;'>
-    A Shazam-style audio fingerprinting system.
-    Upload a clip — we'll tell you which song it is.
+    <p style='text-align:center;color:#9CA3AF;font-size:1.0em;margin-bottom:0.6em;'>
+    Frequency-domain fingerprint matching — peak constellations, paired hashes, offset voting.
     </p>
+    <div class='badge-row'>
+        <span class='badge-pill'>EE200 · SIGNALS &amp; SYSTEMS</span>
+        <span class='badge-pill'>Raj &amp; Abhinav Bajpai</span>
+        <span class='badge-pill'>IIT KANPUR</span>
+    </div>
     <hr style='border-color:#7C3AED33;'/>
     """,
     unsafe_allow_html=True,
@@ -308,15 +376,33 @@ with tab_single:
         st.image(fig_to_bytes(hist_fig), use_container_width=True)
 
         st.markdown("---")
-        st.markdown(f"**Peaks detected:** {len(peaks)}")
         query_hashes = generate_hashes(peaks, use_pairs=use_pairs)
-        st.markdown(f"**Hashes generated:** {len(query_hashes)}")
+        peak_votes_val = "—"
         if offsets:
             best = max(offsets, key=lambda k: len(offsets[k]))
             arr  = offsets[best]
             if len(arr) > 0:
-                peak_votes = int(np.bincount(arr - arr.min()).max())
-                st.markdown(f"**Peak votes for top song:** {peak_votes}")
+                peak_votes_val = int(np.bincount(arr - arr.min()).max())
+
+        st.markdown(
+            f"""
+            <div class='stat-grid'>
+                <div class='stat-card'>
+                    <div class='label'>Peaks Detected</div>
+                    <div class='value'>{len(peaks)}</div>
+                </div>
+                <div class='stat-card'>
+                    <div class='label'>Hashes Generated</div>
+                    <div class='value'>{len(query_hashes)}</div>
+                </div>
+                <div class='stat-card'>
+                    <div class='label'>Peak Votes (Top Song)</div>
+                    <div class='value'>{peak_votes_val}</div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -384,10 +470,25 @@ with tab_batch:
             # ── Summary metrics ──────────────────────────────────────────────
             matched   = sum(1 for _, p in results if p != "no_match" and not p.startswith("error"))
             unmatched = len(results) - matched
-            c1, c2, c3 = st.columns(3)
-            c1.metric("Total clips",   len(results))
-            c2.metric("Matched",       matched,   delta=None)
-            c3.metric("Unmatched",     unmatched, delta=None)
+            st.markdown(
+                f"""
+                <div class='stat-grid'>
+                    <div class='stat-card'>
+                        <div class='label'>Total Clips</div>
+                        <div class='value'>{len(results)}</div>
+                    </div>
+                    <div class='stat-card'>
+                        <div class='label'>Matched</div>
+                        <div class='value'>{matched}</div>
+                    </div>
+                    <div class='stat-card'>
+                        <div class='label'>Unmatched</div>
+                        <div class='value'>{unmatched}</div>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -398,7 +499,8 @@ st.markdown(
     """
     <hr style='border-color:#7C3AED33;'/>
     <p style='text-align:center;color:#9CA3AF;font-size:0.85em;'>
-    Sonic Signatures · Audio Fingerprinting System ·
+    <span style='color:#C4B5FD;font-family:"JetBrains Mono",monospace;'>SONIC SIGNATURES</span>
+    &nbsp;·&nbsp; Frequency Forensics &amp; Missing Boundaries &nbsp;·&nbsp; EE200 Project ·
     Built with <a href='https://librosa.org' target='_blank' style='color:#A78BFA;'>librosa</a>,
     <a href='https://scipy.org' target='_blank' style='color:#A78BFA;'>SciPy</a> &amp;
     <a href='https://streamlit.io' target='_blank' style='color:#A78BFA;'>Streamlit</a>
