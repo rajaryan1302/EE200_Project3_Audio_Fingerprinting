@@ -145,6 +145,26 @@ st.markdown(
     .stProgress > div > div > div > div {
         background-image: linear-gradient(90deg, var(--accent-3), var(--accent-2));
     }
+    /* Full-page gradient background */
+    .stApp {
+        background: linear-gradient(160deg, #0E1117 0%, #1A1430 45%, #2D1B4E 100%);
+    }
+    /* Sidebar gets its own subtler gradient */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #1A1430 0%, #120F24 100%);
+    }
+    /* Gradient buttons (primary + download) */
+    .stButton > button[kind="primary"],
+    .stDownloadButton > button {
+        background: linear-gradient(90deg, var(--accent-3), var(--accent-1)) !important;
+        color: white !important;
+        border: none !important;
+    }
+    .stButton > button[kind="primary"]:hover,
+    .stDownloadButton > button:hover {
+        background: linear-gradient(90deg, var(--accent-1), var(--accent-2)) !important;
+        color: white !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
