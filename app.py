@@ -204,23 +204,23 @@ with tab_single:
             best_match, offsets, hist_fig = match_audio(
                 y, sr, db, use_pairs=use_pairs
             )
-            st.write("### Match Scores")
+            # st.write("### Match Scores")
 
-            for song_name, arr in offsets.items():
+            # for song_name, arr in offsets.items():
 
-                if len(arr) == 0:
-                    continue
+            #     if len(arr) == 0:
+            #         continue
 
-                counts, _ = np.histogram(
-                    arr,
-                    bins=np.arange(arr.min(), arr.max() + 6, 5)
-                )
+            #     counts, _ = np.histogram(
+            #         arr,
+            #         bins=np.arange(arr.min(), arr.max() + 6, 5)
+            #     )
 
-                st.write(
-                    f"{song_name}: "
-                    f"offsets={len(arr)} "
-                    f"peak_votes={counts.max()}"
-                )
+            #     st.write(
+            #         f"{song_name}: "
+            #         f"offsets={len(arr)} "
+            #         f"peak_votes={counts.max()}"
+            #     )
 
         # ── Display ───────────────────────────────────────────────────────────
         if best_match:
